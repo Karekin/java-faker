@@ -7,8 +7,12 @@ import java.util.Locale;
 import java.util.Random;
 
 /**
- * Provides utility methods for generating fake strings, such as names, phone
- * numbers, addresses. generate random strings with given patterns
+ * Faker类提供了生成假数据的实用方法，例如姓名、电话号码、地址等。通过给定的模式生成随机字符串。
+ *
+ * 该类包含了各种领域的实例，如Ancient、App、Artist等，每个实例都提供了相应领域的假数据生成方法。
+ * 可以通过这些实例来生成各种类型的假数据。
+ *
+ * 该类支持多语言，可以通过指定Locale来生成相应语言的假数据。
  *
  * @author ren
  */
@@ -16,6 +20,7 @@ public class Faker {
     private final RandomService randomService;
     private final FakeValuesService fakeValuesService;
 
+    // 下面是各个领域的实例
     private final Ancient ancient;
     private final App app;
     private final Artist artist;
@@ -108,10 +113,18 @@ public class Faker {
     private final EnglandFootBall englandfootball;
     private final Mountain mountain;
 
+    /**
+     * 构造一个默认Locale的Faker实例。
+     */
     public Faker() {
         this(Locale.ENGLISH);
     }
 
+    /**
+     * 构造一个指定Locale的Faker实例。
+     *
+     * @param locale - Locale对象
+     */
     public Faker(Locale locale) {
         this(locale, (Random)null);
     }
@@ -226,7 +239,7 @@ public class Faker {
     }
 
     /**
-     * Constructs Faker instance with default argument.
+     * 返回一个默认Locale的Faker实例。
      *
      * @return {@link Faker#Faker()}
      */
@@ -235,7 +248,7 @@ public class Faker {
     }
 
     /**
-     * Constructs Faker instance with provided {@link Locale}.
+     * 返回一个指定Locale的Faker实例。
      *
      * @param locale - {@link Locale}
      * @return {@link Faker#Faker(Locale)}
@@ -255,7 +268,8 @@ public class Faker {
     }
 
     /**
-     * Constructs Faker instance with provided {@link Locale} and {@link Random}.
+     * 用随机数字替换参数中的'#'字符，生成新的字符串。
+     * 例如，字符串"ABC##EFG"可能被替换为类似"ABC99EFG"的字符串。
      *
      * @param locale - {@link Locale}
      * @param random - {@link Random}
@@ -305,8 +319,7 @@ public class Faker {
     }
 
     /**
-     * Applies both a {@link #numerify(String)} and a {@link #letterify(String)}
-     * over the incoming string.
+     * 生成符合给定正则表达式的字符串。
      *
      * @param string
      * @return
@@ -334,6 +347,11 @@ public class Faker {
         return fakeValuesService.regexify(regex);
     }
 
+    /**
+     * 返回RandomService实例，可用于生成更多自定义的随机数据。
+     *
+     * @return RandomService实例
+     */
     public RandomService random() {
         return this.randomService;
     }
@@ -696,20 +714,19 @@ public class Faker {
     }
 
     /**
-     * Allows the evaluation of native YML expressions to allow you to build your own.
-     * <p>
-     * The following are valid expressions:
-     * <ul>
-     * <li>#{regexify '(a|b){2,3}'}</li>
-     * <li>#{regexify '\\.\\*\\?\\+'}</li>
-     * <li>#{bothify '????','false'}</li>
-     * <li>#{Name.first_name} #{Name.first_name} #{Name.last_name}</li>
-     * <li>#{number.number_between '1','10'}</li>
-     * </ul>
+     * 允许评估原生YML表达式，以便构建自定义的假数据。
+     * 支持的表达式包括regexify、bothify、实例方法调用等。
      *
-     * @param expression (see examples above)
-     * @return the evaluated string expression
-     * @throws RuntimeException if unable to evaluate the expression
+     * 例如：
+     * #{regexify '(a|b){2,3}'}
+     * #{regexify '\\.\\*\\?\\+'}
+     * #{bothify '????','false'}
+     * #{Name.first_name} #{Name.first_name} #{Name.last_name}
+     * #{number.number_between '1','10'}
+     *
+     * @param expression - 表达式字符串
+     * @return 评估后的字符串
+     * @throws RuntimeException 如果无法评估表达式
      */
     public String expression(String expression) {
         return this.fakeValuesService.expression(expression, this);
